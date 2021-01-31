@@ -1,6 +1,8 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 
+import PostCard from '../components/PostCard';
+
 const styles = {
     container: {
         display: 'flex',
@@ -15,8 +17,9 @@ const PostPage = () => {
     return (
     <div style={styles.container}>
         <Typography variant="h4">
-            Yes this is the post page :P
+            Create a post
         </Typography>
+        <PostCard />
     </div>);
 }
 

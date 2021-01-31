@@ -14,10 +14,18 @@ const styles = {
 const HomePage = () => {
     return (
     <div style={styles.container}>
-        <Typography variant="h4">
-            Welcome home dear user.
+        <Typography stlye={{ fontSize: 100, color: 'white' }} variant="h4">
+            Welcome!
         </Typography>
-        <Button style={{ alignSelf: 'center', width: '100px' }} color="primary" onClick={() => alert('clic')}>Click me</Button>
+        <Button 
+        variant="contained"
+        style={{ alignSelf: 'center', width: '200px' }} color="primary">Cliquez ici</Button>
+        <Button 
+        variant="contained"
+        style={{ alignSelf: 'center', width: '200px', marginTop: 20 }} color="secondary">Cliquez ici</Button>
+                <Button 
+        variant="contained"
+        style={{ alignSelf: 'center', width: '200px', marginTop: 20 }} color="inherit">Cliquez ici</Button>
     </div>);
 }
 
