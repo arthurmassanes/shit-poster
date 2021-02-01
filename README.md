@@ -2,6 +2,7 @@
 + Comment replies
 + Search bar
 + Image upload
++ Comment translator
 
 ## Available Scripts
 
