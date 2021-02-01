@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
     Paper,
-    Typography,
     TextField,
     Checkbox,
     FormControlLabel,
@@ -10,43 +9,73 @@ import {
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { maxPostCharacters } from '../constants/post';
+
 const styles = {
     nameInput: {
         display: 'flex',
         flexDirection: 'row',
-        marginTop: '5%',
-        marginBottom: '5%'
+        marginBottom: '3%',
+        justifyContent: 'flex-start'
     },
     container: {
-        padding: '5%', margin: '10%',
+        padding: '5%', margin: '5%',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'space-around'
     },
+    button: { color: 'white', marginTop: '3%' }
 }
 
 const PostCard = () => {
     const [message, setMessage] = useState('');
+    const [author, setAuthor] = useState('');
+    const [anonymous, setAnonymous] = useState(false);
+
+    const handleCheckbox = (e) => {
+        const checked = e.target.checked;
+        setAnonymous(checked);
+        setAuthor(checked ? 'Anonymous shit-poster' : '');
+    }
+
+    const handleMessage = (e) => {
+        e.target.value.length <= maxPostCharacters && setMessage(e.target.value);
+    }
+
+    const postMessage = () => {
+        console.log(author, message);
+    }
+
     return (<Paper elevation={10} style={styles.container}>
         <FormGroup>
-        <Typography variant="h4">What is on your mind ?</Typography>
-        {/* <Divider variant="middle" style={{ margin: '3%'}} /> */}
         <div style={styles.nameInput}>
             <TextField
-                label="Name"                
+                label="Name"
+                disabled={anonymous}
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                style={{ marginRight: '1%' }}
                 variant="outlined"
             />
             <FormControlLabel
-                control={<Checkbox name="isAnonymous" color="primary" />}
+                control={<Checkbox onChange={handleCheckbox} name="isAnonymous" color="primary" />}
                 label="Anonymous"
             />
         </div>
         <TextField
-            onChange={(evt) => setMessage(evt.target.value)}
-            label={`Message (${message.length || 0}/25)`}
+            onChange={handleMessage}
+            label={`Message (${message.length || 0}/${maxPostCharacters})`}
             variant="outlined"
+            value={message}
             multiline
         />
-        <Button size="large" startIcon={<EditIcon size={25} />} style={{ color: 'white'}}>Post</Button>
+        <Button
+            size="large"
+            startIcon={<EditIcon size={25} />}
+            style={styles.button}
+            onClick={postMessage}
+        >
+            Post
+        </Button>
         </FormGroup>
     </Paper>);
 }

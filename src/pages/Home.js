@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 const styles = {
     container: {
@@ -8,24 +8,20 @@ const styles = {
         flex: 1,
         justifyContent: 'center',
         textAlign: 'center'
+    },
+    sub: {
+        fontWeight: 'normal',
+        fontStyle: 'italic'
     }
 };
 
 const HomePage = () => {
     return (
     <div style={styles.container}>
-        <Typography stlye={{ fontSize: 100, color: 'white' }} variant="h4">
+        <Typography variant="h4">
             Welcome!
         </Typography>
-        <Button 
-        variant="contained"
-        style={{ alignSelf: 'center', width: '200px' }} color="primary">Cliquez ici</Button>
-        <Button 
-        variant="contained"
-        style={{ alignSelf: 'center', width: '200px', marginTop: 20 }} color="secondary">Cliquez ici</Button>
-                <Button 
-        variant="contained"
-        style={{ alignSelf: 'center', width: '200px', marginTop: 20 }} color="inherit">Cliquez ici</Button>
+        <Typography style={styles.sub} variant="h6">Here are the latest posts:</Typography>
     </div>);
 }
 
