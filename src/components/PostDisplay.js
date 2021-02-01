@@ -18,7 +18,7 @@ const styles = {
 }
 
 const PostDisplay = (props) => {
-    const { author, message, date, anonymous } = props;
+    const { author, anonymous } = props;
     return (<Paper style={styles.container} elevation={10}>
         <List>
             <ListItem>
