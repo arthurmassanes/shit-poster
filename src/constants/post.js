@@ -1,1 +1,1 @@
-export const maxPostCharacters = 100;
+export const maxPostCharacters = 999;

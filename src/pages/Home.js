@@ -25,7 +25,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchPosts = async () =>  {
             setIsLoading(true);
-            const response = await firestore.collection('posts').get();
+            const response = await firestore.collection('posts').orderBy("date", "desc").get();
             setPosts(response.docs.map((doc) => doc.data()));
             setIsLoading(false);
         };
@@ -36,7 +36,7 @@ const HomePage = () => {
         <Typography variant="h4">
             Welcome!
         </Typography>
-        <Typography style={styles.sub} variant="h6">Here are the latest posts:</Typography>
+        <Typography style={styles.sub} variant="h6">{isLoading ? 'Loading' : 'Here are' } the latest posts: (ordered by date)</Typography>
         {!isLoading ? <Divider variant="middle" /> : <LinearProgress />}
         {posts.map((post) => <PostDisplay key={JSON.stringify(post)} {...post} />)}
     </div>);

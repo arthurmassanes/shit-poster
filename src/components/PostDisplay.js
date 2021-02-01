@@ -14,11 +14,13 @@ const styles = {
     },
     avatar: {
         backgroundColor: theme.palette.primary.main,
+    },
+    message: {
     }
 }
 
 const PostDisplay = (props) => {
-    const { author, anonymous } = props;
+    const { author, message, date, anonymous } = props;
     return (<Paper style={styles.container} elevation={10}>
         <List>
             <ListItem>
@@ -27,7 +29,10 @@ const PostDisplay = (props) => {
                         {!anonymous ? author[0] : <HelpIcon />}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={author} secondary="Jan 9, 2014" />
+                <ListItemText primary={author} secondary={date?.toDate().toLocaleString('en-GB')} />
+            </ListItem>
+            <ListItem style={styles.message}>
+                <ListItemText primary={message} />
             </ListItem>
         </List>
     </Paper>);
