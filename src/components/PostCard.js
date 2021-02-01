@@ -7,7 +7,7 @@ import {
     FormGroup,
     Button
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
 import { maxPostCharacters } from '../constants/post';
 
@@ -21,7 +21,8 @@ const styles = {
     container: {
         padding: '5%', margin: '5%',
         display: 'flex', flexDirection: 'column',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        borderRadius: 42
     },
     button: { color: 'white', marginTop: '3%' }
 }
@@ -70,7 +71,7 @@ const PostCard = () => {
         />
         <Button
             size="large"
-            startIcon={<EditIcon size={25} />}
+            startIcon={<PostAddIcon />}
             style={styles.button}
             onClick={postMessage}
         >

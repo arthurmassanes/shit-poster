@@ -10,7 +10,7 @@ const CreatePostButton = (props) => {
     <Button
         variant="outlined"
         color="inherit"
-        startIcon={<EditIcon size={25} />}
+        startIcon={<EditIcon />}
         style={style}
         onClick={() => history.push('/post')}>
         Create post
