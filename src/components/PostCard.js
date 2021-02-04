@@ -9,11 +9,12 @@ import {
 } from '@material-ui/core';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import firebase, { firestore } from '../services/firebase';
+import firebase, { firestore, storage } from '../services/firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { maxPostCharacters } from '../constants/post';
+import PostImage from '../components/PostImage';
 
 const styles = {
     nameInput: {
@@ -31,12 +32,18 @@ const styles = {
     button: { color: 'white', marginTop: '3%' }
 }
 
+const emptyImage = {
+    file: undefined,
+    url: undefined,
+}
+
 const PostCard = () => {
     const [message, setMessage] = useState('');
     const [author, setAuthor] = useState('');
     const [anonymous, setAnonymous] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState({ author: undefined, message: undefined });
+    const [image, setImage] = useState(emptyImage);
 
     const isEmpty = (str) => !str || str.trim() === '';
 
@@ -51,20 +58,30 @@ const PostCard = () => {
     }
 
     const postMessage = async () => {
-        if (isEmpty(author) || isEmpty(message)) {
+        if (isEmpty(author) || (isEmpty(message) && !image.file)) { // allow empty message if there's an image
             isEmpty(author) && setError({ ...error, author: 'Please enter a name' });
             isEmpty(message) && setError({ ...error, message: 'Do you not want to share a post?' })
             return;
         } else setError({ author: undefined, message: undefined })
         setIsLoading(true);
-        await firestore.collection('posts').add({
-            author,
-            message,
-            anonymous,
-            date: firebase.firestore.Timestamp.fromDate(new Date()) // generate a timestamp from current date1
-        });
+        try {
+            let url;
+            if (image.file) {
+                const uploadTask = await storage.ref(`images/${image.file.name}`).put(image.file);
+                url = await uploadTask.ref.getDownloadURL();
+                setImage({ ...image, url });
+            };
+            await firestore.collection('posts').add({
+                author,
+                message,
+                anonymous,
+                ...(url && { imageUrl: url }), // spread imageUrl only if defined
+                date: firebase.firestore.Timestamp.fromDate(new Date()) // generate a timestamp from current date
+            })
+        } catch (e) { console.error(e) }
         setIsLoading(false);
-        toast("Your post was successfully uploaded to Shit-Poster!");
+        toast(`Post sucessfully uploaded ! Thank you ${author} !`);
+        setImage(emptyImage);
         setMessage('');
     }
 
@@ -95,6 +112,7 @@ const PostCard = () => {
             value={message}
             multiline
         />
+        <PostImage setFile={file => setImage({ ...image, file })} />
         <Button
             size="large"
             startIcon={!isLoading && <PostAddIcon />}

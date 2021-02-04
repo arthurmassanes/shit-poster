@@ -8,19 +8,27 @@ const styles = {
     container: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '1%',
-        margin: '2%',
-        borderRadius: 42
+        padding: '3%',
+        margin: '3%',
+        borderRadius: 42,
     },
     avatar: {
         backgroundColor: theme.palette.primary.main,
     },
     message: {
+    },
+    image: {
+        maxHeight: '100%',
+        maxWidth: '100%',
+        width: 'auto',
+        height: 'auto',
+    },
+    imageContainer: {
     }
 }
 
 const PostDisplay = (props) => {
-    const { author, message, date, anonymous } = props;
+    const { author, message, date, anonymous, imageUrl } = props;
     return (<Paper style={styles.container} elevation={10}>
         <List>
             <ListItem>
@@ -34,6 +42,11 @@ const PostDisplay = (props) => {
             <ListItem style={styles.message}>
                 <ListItemText primary={message} />
             </ListItem>
+            {imageUrl && <ListItem styles={styles.imageContainer}>
+                <a target="_blank" rel="noopener noreferrer" href={imageUrl}>
+                    <img alt="" style={styles.image} src={imageUrl} />
+                </a>
+            </ListItem>}
         </List>
     </Paper>);
 }
