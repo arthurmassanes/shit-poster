@@ -67,10 +67,10 @@ const PostCard = () => {
         try {
             let url;
             if (image.file) {
-                const uploadTask = await storage.ref(`images/${image.file.name}`).put(image.file);
+                const uploadTask = await storage.ref(`images/${Date.now()}${image.file.name}`).put(image.file);
                 url = await uploadTask.ref.getDownloadURL();
                 setImage({ ...image, url });
-            };
+            }
             await firestore.collection('posts').add({
                 author,
                 message,

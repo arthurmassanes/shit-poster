@@ -4,8 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@material-ui/styles';
-
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
 import theme from './constants/colors';
+
+TimeAgo.addDefaultLocale(en)
 
 ReactDOM.render(
   <React.StrictMode>

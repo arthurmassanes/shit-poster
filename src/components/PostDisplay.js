@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paper, List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
+import TimeAgo from 'javascript-time-ago';
 
 import theme from '../constants/colors';
 
@@ -29,6 +30,8 @@ const styles = {
 
 const PostDisplay = (props) => {
     const { author, message, date, anonymous, imageUrl } = props;
+
+    const formattedDate = `${new TimeAgo('en-US').format(date?.toDate())} (${date?.toDate().toLocaleString('en-GB')})`;
     return (<Paper style={styles.container} elevation={10}>
         <List>
             <ListItem>
@@ -37,7 +40,7 @@ const PostDisplay = (props) => {
                         {!anonymous ? author[0] : <HelpIcon />}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={author} secondary={date?.toDate().toLocaleString('en-GB')} />
+                <ListItemText primary={author} secondary={formattedDate} />
             </ListItem>
             <ListItem style={styles.message}>
                 <ListItemText primary={message} />
