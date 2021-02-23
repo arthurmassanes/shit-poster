@@ -9,8 +9,10 @@ exports.onItemCreation = functions.firestore.document('posts/{postId}')
             to: [item.email],
             message: {
                 subject: 'New comment on your shit-post',
-                html: `<div style="border: 2px solid #efd5ff; border-radius: 20px"><h1 style="color: #515ada">Hello ${item.author}, someone commented on your shit-post!</h1>
+                html: `<div style="border: 2px solid #efd5ff; border-radius: 20px; margin: 10%">
+                <h1 style="color: #515ada">Hello ${item.author}, someone commented on your shit-post!</h1>
                 <p>View all ${item.comments.length} comments at <a href="https://shit-poster.web.app">https://shit-poster.web.app</a></p>
+                <i>From the Shit-Poster team <3</i>
                 </div>`
             }
         })).then(() => console.log('EMAIL WAS QUEUED'))
