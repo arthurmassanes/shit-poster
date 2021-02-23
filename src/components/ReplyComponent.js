@@ -33,7 +33,7 @@ const styles = {
 const PostReply = (props) => {
     const [tab, setTab] = useState(0);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [comments, setComments] = useState(props.comments);
+    const [comments, setComments] = useState(props.comments || []);
     const { author, id } = props;
 
     const handleChange = (event, newValue) => setTab(newValue);
@@ -50,7 +50,7 @@ const PostReply = (props) => {
     return (<div style={styles.container}>
         <Button onClick={() => setIsDrawerOpen(true)} style={styles.button} color="primary" size="small">
             <ChatBubbleOutlineIcon style={{ paddingRight: '1%' }} fontSize="inherit" />
-            <p>View replies to {author}'s post</p>
+            <p>View {comments?.length || 0} {comments?.length === 1 ? 'reply' : 'replies'} to {author}'s post</p>
         </Button>
         <Drawer
             width="100%"
@@ -71,7 +71,7 @@ const PostReply = (props) => {
             </Tabs>
             {tab === 0
             ? <div style={styles.drawer}>
-                {(!comments || comments.length <= 0) && <Typography style={styles.title}>No comments on this post!</Typography>}
+                <Typography style={styles.title}>{ (!comments || comments.length <= 0) ? 'No comments on this post!' : `Comments on ${author}'s post:`} </Typography>
                 {comments && comments.map((c) => <PostDisplay isReply key={c.message} {...c} />).reverse()}
             </div>
             :<PostCard replyId={id} />}
