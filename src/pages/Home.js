@@ -26,7 +26,7 @@ const HomePage = () => {
         const fetchPosts = async () =>  {
             setIsLoading(true);
             const response = await firestore.collection('posts').orderBy("date", "desc").get();
-            setPosts(response.docs.map((doc) => doc.data()));
+            setPosts(response.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
             setIsLoading(false);
         };
         fetchPosts();

@@ -5,7 +5,7 @@ import {
     Checkbox,
     FormControlLabel,
     FormGroup,
-    Button
+    Button,
 } from '@material-ui/core';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -37,7 +37,7 @@ const emptyImage = {
     url: undefined,
 }
 
-const PostCard = () => {
+const PostCard = ({ replyId }) => {
     const [message, setMessage] = useState('');
     const [author, setAuthor] = useState('');
     const [anonymous, setAnonymous] = useState(false);
@@ -58,6 +58,7 @@ const PostCard = () => {
     }
 
     const postMessage = async () => {
+        console.log(replyId)
         if (isEmpty(author) || (isEmpty(message) && !image.file)) { // allow empty message if there's an image
             isEmpty(author) && setError({ ...error, author: 'Please enter a name' });
             isEmpty(message) && setError({ ...error, message: 'Do you not want to share a post?' })
@@ -71,13 +72,16 @@ const PostCard = () => {
                 url = await uploadTask.ref.getDownloadURL();
                 setImage({ ...image, url });
             }
-            await firestore.collection('posts').add({
+            const newPost = {
                 author,
                 message,
                 anonymous,
                 ...(url && { imageUrl: url }), // spread imageUrl only if defined
                 date: firebase.firestore.Timestamp.fromDate(new Date()) // generate a timestamp from current date
-            })
+            };
+            const ref = firestore.collection('posts');
+            if (replyId) ref.doc(replyId).update({ comments: firebase.firestore.FieldValue.arrayUnion(newPost) })
+            else await firestore.collection('posts').add(newPost)
         } catch (e) { console.error(e) }
         setIsLoading(false);
         toast(`Post sucessfully uploaded ! Thank you ${author} !`);
@@ -115,6 +119,8 @@ const PostCard = () => {
         <PostImage setFile={file => setImage({ ...image, file })} />
         <Button
             size="large"
+            variant="contained"
+            color="primary"
             startIcon={!isLoading && <PostAddIcon />}
             style={styles.button}
             onClick={postMessage}
@@ -124,6 +130,10 @@ const PostCard = () => {
         </FormGroup>
         <ToastContainer />
     </Paper>);
+}
+
+PostCard.defaultProps = {
+    replyId: undefined
 }
 
 export default PostCard;

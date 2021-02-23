@@ -4,6 +4,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import TimeAgo from 'javascript-time-ago';
 
 import theme from '../constants/colors';
+import PostReply from './ReplyComponent';
 
 const styles = {
     container: {
@@ -29,9 +30,9 @@ const styles = {
 }
 
 const PostDisplay = (props) => {
-    const { author, message, date, anonymous, imageUrl } = props;
+    const { author, message, date, anonymous, imageUrl, isReply } = props;
 
-    const formattedDate = `${new TimeAgo('en-US').format(date?.toDate())} (${date?.toDate().toLocaleString('en-GB')})`;
+    const formattedDate = date ? `${new TimeAgo('en-US').format(date?.toDate())} (${date?.toDate().toLocaleString('en-GB')})` : '';
     return (<Paper style={styles.container} elevation={10}>
         <List>
             <ListItem>
@@ -40,7 +41,7 @@ const PostDisplay = (props) => {
                         {!anonymous ? author[0] : <HelpIcon />}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={author} secondary={formattedDate} />
+                <ListItemText primary={author} secondary={formattedDate || ''} />
             </ListItem>
             <ListItem style={styles.message}>
                 <ListItemText primary={message} />
@@ -50,8 +51,16 @@ const PostDisplay = (props) => {
                     <img alt="" style={styles.image} src={imageUrl} />
                 </a>
             </ListItem>}
+            {!isReply && <PostReply {...props} />}
         </List>
     </Paper>);
+}
+
+PostDisplay.defaultProps = {
+    author: '',
+    message: '',
+    imageUrl: undefined,
+    isReply: false
 }
 
 export default PostDisplay;

@@ -20,16 +20,7 @@ const theme = createMuiTheme({
             main: secondary
         }
     },
-    overrides: {
-        // Style sheet name ⚛️
-        MuiButton: {
-          // Name of the rule
-          text: {
-            // Some CSS
-            background: gradient,
-          },
-        },
-      },
+    overrides: {},
 });
 
 export default theme;
