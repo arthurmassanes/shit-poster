@@ -40,6 +40,7 @@ const emptyImage = {
 const PostCard = ({ replyId }) => {
     const [message, setMessage] = useState('');
     const [author, setAuthor] = useState('');
+    const [email, setEmail] = useState('');
     const [anonymous, setAnonymous] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState({ author: undefined, message: undefined });
@@ -75,6 +76,7 @@ const PostCard = ({ replyId }) => {
             const newPost = {
                 author,
                 message,
+                ...(email && { email }),
                 anonymous,
                 ...(url && { imageUrl: url }), // spread imageUrl only if defined
                 date: firebase.firestore.Timestamp.fromDate(new Date()) // generate a timestamp from current date
@@ -105,8 +107,17 @@ const PostCard = ({ replyId }) => {
             <FormControlLabel
                 control={<Checkbox onChange={handleCheckbox} name="isAnonymous" color="primary" />}
                 label="Anonymous"
-            />
+                />
         </div>
+        {!anonymous && !replyId && <TextField
+            label="Email (optional - not displayed)"
+            helperText="Enter your email address if you want to be notified when someone comments on your post."
+            disabled={anonymous}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ marginRight: '1%' }}
+            variant="outlined"
+        />}
         <TextField
             onChange={handleMessage}
             label={`Message (${message.length || 0}/${maxPostCharacters})`}
