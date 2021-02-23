@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import AddCommentIcon from '@material-ui/icons/AddComment';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,6 +7,7 @@ import { Typography } from '@material-ui/core';
 import PostDisplay from './PostDisplay';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { firestore } from '../services/firebase';
 
 import PostCard from '../components/PostCard';
 
@@ -25,16 +26,27 @@ const styles = {
         padding: '1%',
     },
     drawer: {
+        maxHeight: '60vh'
     }
 }
 
 const PostReply = (props) => {
     const [tab, setTab] = useState(0);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [comments, setComments] = useState(props.comments);
+    const { author, id } = props;
 
     const handleChange = (event, newValue) => setTab(newValue);
 
-    const { comments, author, id } = props;
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const response = await firestore.collection('posts').doc(id).get();
+               setComments(response.data().comments);
+            } catch (e) {}
+        }
+        if (isDrawerOpen && tab === 0) fetchComments();
+    }, [tab, isDrawerOpen, id]);
     return (<div style={styles.container}>
         <Button onClick={() => setIsDrawerOpen(true)} style={styles.button} color="primary" size="small">
             <ChatBubbleOutlineIcon style={{ paddingRight: '1%' }} fontSize="inherit" />
@@ -58,9 +70,9 @@ const PostReply = (props) => {
                 <Tab label="Post a comment" icon={<AddCommentIcon />}/>
             </Tabs>
             {tab === 0
-            ? <div>
-                {comments.length <= 0 && <Typography style={styles.title}>No comments on this post!</Typography>}
-                {comments.map((c) => <PostDisplay isReply key={c.message} {...c} />)}
+            ? <div style={styles.drawer}>
+                {(!comments || comments.length <= 0) && <Typography style={styles.title}>No comments on this post!</Typography>}
+                {comments && comments.map((c) => <PostDisplay isReply key={c.message} {...c} />).reverse()}
             </div>
             :<PostCard replyId={id} />}
         </Drawer>
