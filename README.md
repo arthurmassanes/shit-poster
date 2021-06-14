@@ -1,8 +1,8 @@
 # Enhancement ideas:
-+ Comment replies
-+ Search bar
-+ Image upload
-+ Comment translator
+- [x] Comment replies
+- [ ] Search bar
+- [x] Image upload
+- [ ] Comment translator
 
 ## Available Scripts
 
